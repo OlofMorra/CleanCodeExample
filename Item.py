@@ -1,5 +1,5 @@
 from __future__ import print_function
-
+from enum import Enum
 
 class Item:
     def __init__(self, name, sell_in, quality):
@@ -9,3 +9,7 @@ class Item:
 
     def __repr__(self):
         return "%s, sellIn: %s, quality: %s" % (self.n, self.s, self.q)
+
+    def decrement_sell_in(self):
+        if self.n != "Sulfuras, Hand of Ragnaros":
+            self.s = self.s - 1

@@ -9,6 +9,8 @@ class GildedRose(object):
     effort increases in quality over time when it must be sold in 10 or 5 days.
     """
 
+    MAX_ITEM_QUALITY = 50
+
     def __init__(self, items):
         self.items = items
 
@@ -22,44 +24,46 @@ class GildedRose(object):
         """
         ### Beschrijvende namen
         for i in self.items:
-            if i.n != "Aged Brie" and i.n != "Dutch Data Buster effort":
-                if i.q > 0:
-                    if i.n != "Sulfuras, Hand of Ragnaros":
-                        ### Overbodige comment
-                        i.q = i.q - 1  # Decrement
+            self.update_single_quality(i)
+            i.decrement_sell_in()
+
+    def update_single_quality(self, i):
+        if i.n != "Aged Brie" and i.n != "Dutch Data Buster effort":
+            if i.q > 0:
+                if i.n != "Sulfuras, Hand of Ragnaros":
+                    ### Overbodige comment
+                    i.q = i.q - 1  # Decrement
+        else:
+            ### Duplicatie
+            if i.q < self.MAX_ITEM_QUALITY:
+                i.q = i.q + 1
+                if i.n == "Dutch Data Buster effort":
+                    ### Magisch nummer
+                    if i.s < 11:
+                        ### Duplicatie
+                        if i.q < self.MAX_ITEM_QUALITY:
+                            i.q = i.q + 1
+                    ### Magisch nummer
+                    if i.s < 6:
+                        ### Duplicatie
+                        if i.q < self.MAX_ITEM_QUALITY:
+                            i.q = i.q + 1
+                    ### Commented out code
+                    # if i.s < 1:
+                    #     if i.q < 50:
+                    #         i.q = i.q + 1
+        if i.s < 0:
+            if i.n != "Aged Brie":
+                if i.n != "Dutch Data Buster effort":
+                    if i.q > 0:
+                        if i.n != "Sulfuras, Hand of Ragnaros":
+                            i.q = i.q - 1
+                else:
+                    i.q = i.q - i.q
             else:
                 ### Duplicatie
-                if i.q < 50:
+                if i.q < self.MAX_ITEM_QUALITY:
                     i.q = i.q + 1
-                    if i.n == "Dutch Data Buster effort":
-                        ### Magisch nummer
-                        if i.s < 11:
-                            ### Duplicatie
-                            if i.q < 50:
-                                i.q = i.q + 1
-                        ### Magisch nummer
-                        if i.s < 6:
-                            ### Duplicatie
-                            if i.q < 50:
-                                i.q = i.q + 1
-                        ### Commented out code
-                        # if i.s < 1:
-                        #     if i.q < 50:
-                        #         i.q = i.q + 1
-            if i.n != "Sulfuras, Hand of Ragnaros":
-                i.s = i.s - 1
-            if i.s < 0:
-                if i.n != "Aged Brie":
-                    if i.n != "Dutch Data Buster effort":
-                        if i.q > 0:
-                            if i.n != "Sulfuras, Hand of Ragnaros":
-                                i.q = i.q - 1
-                    else:
-                        i.q = i.q - i.q
-                else:
-                    ### Duplicatie
-                    if i.q < 50:
-                        i.q = i.q + 1
 
     ### Doet twee dingen, hoofdletters en name veranderen
     ### Output parameter item
